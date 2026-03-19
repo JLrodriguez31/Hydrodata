@@ -1,10 +1,6 @@
 import { useMemo, useState } from 'react'
 import districtsData from '../config/data/districts.json'
 import mapImage from '../assets/images/Mapa.png'
-import { useQuery } from '@tanstack/react-query'
-import { getAverages } from '@/services/hackatorepte3Service'
-import Loading from '@components/ui/Loading'
-import ErrorApi from '@components/ui/ErrorApi'
 
 interface District {
     name: string
@@ -37,16 +33,16 @@ export default function MapPage() {
         console.log('Posición actualizada:', newDistricts[index])
     }
 
-    // 1) Traer promedios del backend
-    const {
-        data: averagesRaw,
-        isPending,
-        isError,
-        error,
-    } = useQuery({
-        queryKey: ['averages-map'],
-        queryFn: () => getAverages(),
-    })
+    // Demo mode: promedios derivados de datos locales.
+    const averagesRaw = useMemo(() => {
+        return districtsData.districts.reduce<Record<string, number>>(
+            (acc, district) => {
+                acc[district.name] = Number(district.median_consumption_m3)
+                return acc
+            },
+            {}
+        )
+    }, [])
 
     // 2) Normalización de nombres para cruzar API <-> JSON local
     const normalize = (s: string) =>
@@ -81,12 +77,9 @@ export default function MapPage() {
                 </h1>
                 <p className="text-sm md:text-base opacity-90 mt-1">
                     Pasa el ratón sobre cada distrito para ver el promedio de
-                    consumo. Base: endpoint /averages
+                    consumo. Base: datos demo locales
                 </p>
             </div>
-
-            {isPending && <Loading />}
-            {isError && error && <ErrorApi message={error.message} />}
 
             <div className="relative max-w-4xl mx-auto">
                 <img
@@ -227,7 +220,7 @@ export default function MapPage() {
                                 m³
                             </span>
                         </div>
-                        <p className="text-xs opacity-70">Fuente: /averages</p>
+                        <p className="text-xs opacity-70">Fuente: datos demo</p>
                     </div>
                 )}
             </div>

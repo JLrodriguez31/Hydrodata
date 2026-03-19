@@ -1,13 +1,9 @@
 // src/pages/MonitorPage.tsx
 import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import Loading from '@components/ui/Loading'
-import ErrorApi from '@components/ui/ErrorApi'
-import { getNeighborhoods } from '@/services/hackatorepte3Service'
 import metricsData from '../config/data/metrics.json'
+import districtsData from '../config/data/districts.json'
 import NeighborhoodConsumptionChart from '@components/charts/NeighborhoodConsumptionChart'
 import DistrictAveragesBarChart, { type DistrictAverage } from '@components/charts/DistrictAveragesBarChart'
-import { getAverages } from '@/services/hackatorepte3Service'
 
 interface BarItem {
   hour: string
@@ -16,43 +12,23 @@ interface BarItem {
 }
 
 export default function HomePage() {
-  // 1) Pedimos datos al backend. Si no están disponibles o el shape no coincide,
-  // seguimos usando los datos estáticos de metrics.json.
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ['metrics'],
-    queryFn: () => getNeighborhoods(),
-  })
-
-  const {
-    data: averagesRaw,
-    isPending: avgPending,
-    isError: avgIsError,
-    error: avgError,
-  } = useQuery({
-    queryKey: ['averages'],
-    queryFn: () => getAverages(),
-  })
-
-  // 2) Intentamos adaptar la respuesta al shape esperado por los gráficos
-  type BackendMetrics = { barData?: BarItem[]; radialValues?: number[] }
-  const { barData, radialValues } = useMemo(() => {
-    // Si el backend ya devuelve el mismo shape que metrics.json, úsalo directamente
-    if (data && typeof data === 'object') {
-      const { barData: maybeBar, radialValues: maybeRadials } = data as BackendMetrics
-      if (Array.isArray(maybeBar) && Array.isArray(maybeRadials)) {
-        return {
-          barData: maybeBar as BarItem[],
-          radialValues: maybeRadials as number[],
-        }
-      }
-    }
-
-    // Fallback a datos estáticos
-    return {
+  // Demo mode: mostramos datos locales para evitar dependencias de backend.
+  const { barData, radialValues } = useMemo(
+    () => ({
       barData: metricsData.barData as BarItem[],
       radialValues: metricsData.radialValues as number[],
-    }
-  }, [data])
+    }),
+    []
+  )
+
+  const averagesRaw = useMemo(
+    () =>
+      districtsData.districts.reduce<Record<string, number>>((acc, district) => {
+        acc[district.name] = Number(district.median_consumption_m3)
+        return acc
+      }, {}),
+    []
+  )
 
   // Validación básica
   if (!barData || !radialValues || barData.length === 0 || radialValues.length === 0) {
@@ -62,13 +38,6 @@ export default function HomePage() {
       </div>
     )
   }
-
-  if (isPending || avgPending) return <Loading />
-  if ((isError && error) || (avgIsError && avgError)) {
-    return <ErrorApi message={(error || avgError)!.message} />
-  }
-
-  // globalMax no es necesario con Recharts; la escala se calcula automáticamente
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#2E5B9C] to-[#00E0D0] text-white p-4 md:p-8">
@@ -155,7 +124,7 @@ export default function HomePage() {
       <div className="mb-8 bg-white/10 backdrop-blur-sm border border-white/20 flex flex-col rounded-lg p-6 text-center">
         <div className="mb-4">
           <h2 className="text-xl font-bold">Promedio de consumo por distrito</h2>
-          <p className="text-sm opacity-80">Datos del endpoint /averages</p>
+          <p className="text-sm opacity-80">Datos demo locales</p>
         </div>
         <DistrictAveragesBarChart
           data={Object.entries(averagesRaw ?? {}).map(([district, value]) => ({
