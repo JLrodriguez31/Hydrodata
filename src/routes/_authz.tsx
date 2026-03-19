@@ -8,6 +8,15 @@ import Aside from '@/layouts/authz/Aside'
 export const Route = createFileRoute('/_authz')({
     beforeLoad: async () => {
         const { data } = await supabase.auth.getSession()
+
+        const hasGuestAccess =
+            typeof window !== 'undefined' &&
+            window.sessionStorage.getItem('hydrodata_guest_access') === 'true'
+
+        if (hasGuestAccess) {
+            return
+        }
+
         if (!data.session) {
             throw redirect({ to: '/' })
         }

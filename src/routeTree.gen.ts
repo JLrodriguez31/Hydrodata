@@ -28,6 +28,7 @@ const AuthnSignInLazyRouteImport = createFileRoute('/_authn/sign-in')()
 const AuthnResetPasswordLazyRouteImport = createFileRoute(
   '/_authn/reset-password',
 )()
+const AuthnGuestLazyRouteImport = createFileRoute('/_authn/guest')()
 const AuthnCheckEmailLazyRouteImport = createFileRoute('/_authn/check-email')()
 
 const AuthzRoute = AuthzRouteImport.update({
@@ -97,6 +98,11 @@ const AuthnResetPasswordLazyRoute = AuthnResetPasswordLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_authn/reset-password.lazy').then((d) => d.Route),
 )
+const AuthnGuestLazyRoute = AuthnGuestLazyRouteImport.update({
+  id: '/guest',
+  path: '/guest',
+  getParentRoute: () => AuthnRoute,
+} as any).lazy(() => import('./routes/_authn/guest.lazy').then((d) => d.Route))
 const AuthnCheckEmailLazyRoute = AuthnCheckEmailLazyRouteImport.update({
   id: '/check-email',
   path: '/check-email',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/monitorpage': typeof AuthzMonitorpageRoute
   '/check-email': typeof AuthnCheckEmailLazyRoute
+  '/guest': typeof AuthnGuestLazyRoute
   '/reset-password': typeof AuthnResetPasswordLazyRoute
   '/sign-in': typeof AuthnSignInLazyRoute
   '/sign-up': typeof AuthnSignUpLazyRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/monitorpage': typeof AuthzMonitorpageRoute
   '/check-email': typeof AuthnCheckEmailLazyRoute
+  '/guest': typeof AuthnGuestLazyRoute
   '/reset-password': typeof AuthnResetPasswordLazyRoute
   '/sign-in': typeof AuthnSignInLazyRoute
   '/sign-up': typeof AuthnSignUpLazyRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/_authz': typeof AuthzRouteWithChildren
   '/_authz/monitorpage': typeof AuthzMonitorpageRoute
   '/_authn/check-email': typeof AuthnCheckEmailLazyRoute
+  '/_authn/guest': typeof AuthnGuestLazyRoute
   '/_authn/reset-password': typeof AuthnResetPasswordLazyRoute
   '/_authn/sign-in': typeof AuthnSignInLazyRoute
   '/_authn/sign-up': typeof AuthnSignUpLazyRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/'
     | '/monitorpage'
     | '/check-email'
+    | '/guest'
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/'
     | '/monitorpage'
     | '/check-email'
+    | '/guest'
     | '/reset-password'
     | '/sign-in'
     | '/sign-up'
@@ -186,6 +197,7 @@ export interface FileRouteTypes {
     | '/_authz'
     | '/_authz/monitorpage'
     | '/_authn/check-email'
+    | '/_authn/guest'
     | '/_authn/reset-password'
     | '/_authn/sign-in'
     | '/_authn/sign-up'
@@ -281,6 +293,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthnResetPasswordLazyRouteImport
       parentRoute: typeof AuthnRoute
     }
+    '/_authn/guest': {
+      id: '/_authn/guest'
+      path: '/guest'
+      fullPath: '/guest'
+      preLoaderRoute: typeof AuthnGuestLazyRouteImport
+      parentRoute: typeof AuthnRoute
+    }
     '/_authn/check-email': {
       id: '/_authn/check-email'
       path: '/check-email'
@@ -300,6 +319,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthnRouteChildren {
   AuthnCheckEmailLazyRoute: typeof AuthnCheckEmailLazyRoute
+  AuthnGuestLazyRoute: typeof AuthnGuestLazyRoute
   AuthnResetPasswordLazyRoute: typeof AuthnResetPasswordLazyRoute
   AuthnSignInLazyRoute: typeof AuthnSignInLazyRoute
   AuthnSignUpLazyRoute: typeof AuthnSignUpLazyRoute
@@ -307,6 +327,7 @@ interface AuthnRouteChildren {
 
 const AuthnRouteChildren: AuthnRouteChildren = {
   AuthnCheckEmailLazyRoute: AuthnCheckEmailLazyRoute,
+  AuthnGuestLazyRoute: AuthnGuestLazyRoute,
   AuthnResetPasswordLazyRoute: AuthnResetPasswordLazyRoute,
   AuthnSignInLazyRoute: AuthnSignInLazyRoute,
   AuthnSignUpLazyRoute: AuthnSignUpLazyRoute,
