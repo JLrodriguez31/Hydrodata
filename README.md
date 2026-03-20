@@ -1,4 +1,4 @@
-# HackathonRepte3_Frontend
+# Hydrodata
 
 Frontend para el desafío **Hackathon Repte 3**.  
 Este proyecto está desarrollado con **TypeScript** y **Vite**, con soporte de herramientas de linting y formateo para mantener un código limpio y consistente.
