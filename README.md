@@ -5,6 +5,38 @@ Este proyecto está desarrollado con **TypeScript** y **Vite**, con soporte de h
 
 ---
 
+## 🎥 Preview
+
+### 💧 Hydrodata Preview
+![Store Preview](preview/preview_hydrodata.gif)
+
+---
+
+### 🏠 Home Page
+![Invalid Form](preview/WelcomePage.png)
+
+---
+
+### 🔐 Auth Page
+![Valid Form](preview/AuthPage.png)
+
+---
+
+### 📈 Dashboard Page
+![Invalid Form](preview/DashboardPage.png)
+
+---
+
+### 📊 Monitor Page
+![Valid Form](preview/MonitorPage.png)
+
+---
+
+### 🗺️ Map Page
+![Valid Form](preview/MapPage.png)
+
+---
+
 ## 📁 Estructura del proyecto
 
 ├── public/
