@@ -8,32 +8,32 @@ Este proyecto está desarrollado con **TypeScript** y **Vite**, con soporte de h
 ## 🎥 Preview
 
 ### 💧 Hydrodata Preview
-![Store Preview](preview/preview_hydrodata.gif)
+![Store Preview](Preview/preview_hydrodata.gif)
 
 ---
 
 ### 🏠 Home Page
-![Invalid Form](preview/WelcomePage.png)
+![Invalid Form](Preview/WelcomePage.png)
 
 ---
 
 ### 🔐 Auth Page
-![Valid Form](preview/AuthPage.png)
+![Valid Form](Preview/AuthPage.png)
 
 ---
 
 ### 📈 Dashboard Page
-![Invalid Form](preview/DashboardPage.png)
+![Invalid Form](Preview/DashboardPage.png)
 
 ---
 
 ### 📊 Monitor Page
-![Valid Form](preview/MonitorPage.png)
+![Valid Form](Preview/MonitorPage.png)
 
 ---
 
 ### 🗺️ Map Page
-![Valid Form](preview/MapPage.png)
+![Valid Form](Preview/MapPage.png)
 
 ---
 
